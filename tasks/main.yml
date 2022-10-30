@@ -1,0 +1,18 @@
+---
+# tasks file for RabbitMQ
+- name: Render RabbitMQ manifest
+  template:
+    src: rabbitmq_deployment.j2.yaml
+    dest: '{{ manifest_folder }}/rabbitmq_deployment.yaml'
+- name: Create RabbitMQ deployment
+  shell:
+    cmd: 'kubectl apply -f rabbitmq_deployment.yaml -n {{ gisnamespace }}'
+    chdir: '{{ manifest_folder }}'
+- name: Render RabbitMQ service manifest
+  template:
+    src: rabbitmq_service.j2.yaml
+    dest: '{{ manifest_folder }}/rabbitmq_service.yaml'
+- name: Create RabbitMQ serice
+  shell:
+    cmd: 'kubectl apply -f rabbitmq_service.yaml -n {{ gisnamespace }}'
+    chdir: '{{ manifest_folder }}'

@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmq
+  labels:
+    app: rabbitmq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rabbitmq
+  template:
+    metadata:
+      labels:
+        app: rabbitmq
+    spec:
+      containers:
+        - name: rabbitmq
+          image: "{{ rabbitmq.container_image }}:{{ rabbitmq.container_version }}"
+          imagePullPolicy: IfNotPresent
+          #envFrom:
+          #  - configMapRef:
+          #      name: rabbitmq
+          #env:
+          #  - name: rabbitmq_DEFAULT_PASSWORD
+          #    valueFrom:
+          #      secretKeyRef:
+          #        name: rabbitmq
+          #        key: rabbitmq-password
+          ports:
+            - name: http
+              containerPort: 5672
+              protocol: TCP
+          #volumeMounts:
+          #  - name: rabbitmq-data
+          #    mountPath: /var/lib/rabbitmq
+          #  - name: pga-configmap
+          #    mountPath: /rabbitmq4/servers.json
+          #    subPath: servers.json
+      #volumes:
+      #  - name: rabbitmq-data
+      #    persistentVolumeClaim:
+      #      claimName: rabbitmq-claim
+      #  - name: pga-configmap
+      #    configMap:
+      #      name: pga-configmap
